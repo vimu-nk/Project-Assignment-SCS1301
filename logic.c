@@ -34,7 +34,7 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g)
     rollVals[3] = *g;
     printf("%d\n\n", *g);
 
-    
+
 
     // for(short x = 6; x > 0; x--)
     // {

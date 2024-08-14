@@ -11,7 +11,7 @@ int main()
     struct player red;
     struct player green;
 
-    short playOrder[4];
+    short playOrder[4] = {0, 1, 2, 3};
 
     srand(time(NULL));
 
