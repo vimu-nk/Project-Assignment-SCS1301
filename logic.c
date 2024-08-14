@@ -16,7 +16,6 @@ short coinToss()
 void callingOrder(short order[], short *y, short *b, short *r, short *g)
 {
     short rollVals[4];
-    short firstHigh = -1;
 
     *y = diceRoll();
     rollVals[0] = *y;
@@ -34,7 +33,21 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g)
     rollVals[3] = *g;
     printf("%d\n\n", *g);
 
-
+    for(short i = 0; i < 3; i++)
+    {
+        for(short j = 0; j < 3 - i; j++)
+        {
+            if(rollVals[j] < rollVals[j + 1])
+            {
+                short temp = rollVals[j + 1];
+                short tempI = order[j + 1];
+                rollVals[j + 1] = rollVals[j];
+                order[j + 1] = order[j];
+                rollVals[j] = temp;
+                order[j] = tempI;
+            }
+        }
+    }
 
     // for(short x = 6; x > 0; x--)
     // {
