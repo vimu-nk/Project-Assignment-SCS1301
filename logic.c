@@ -34,34 +34,36 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g)
     rollVals[3] = *g;
     printf("%d\n\n", *g);
 
-    for(short x = 6; x > 0; x--)
-    {
-        for(short y = 0; y < 4; y++)
-        {
-            if(x == rollVals[y])
-            {
-                firstHigh = y;
-                break;
-            }
-        }
+    
 
-        if(firstHigh != -1)
-        {
-            break;
-        }
-    }
+    // for(short x = 6; x > 0; x--)
+    // {
+    //     for(short y = 0; y < 4; y++)
+    //     {
+    //         if(x == rollVals[y])
+    //         {
+    //             firstHigh = y;
+    //             break;
+    //         }
+    //     }
 
-    for(short i = 0; i < 4; i++)
-    {
-        if(firstHigh == 3)
-        {
-            order[i] = firstHigh;
-            firstHigh = 0;
-        }
-        else
-        {
-            order[i] = firstHigh;
-            firstHigh++;
-        }
-    }
+    //     if(firstHigh != -1)
+    //     {
+    //         break;
+    //     }
+    // }
+
+    // for(short i = 0; i < 4; i++)
+    // {
+    //     if(firstHigh == 3)
+    //     {
+    //         order[i] = firstHigh;
+    //         firstHigh = 0;
+    //     }
+    //     else
+    //     {
+    //         order[i] = firstHigh;
+    //         firstHigh++;
+    //     }
+    // }
 }
