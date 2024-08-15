@@ -6,26 +6,35 @@
 
 int main()
 {
-    struct player yellow;
-    struct player blue;
-    struct player red;
-    struct player green;
+    struct players player[4]; //0 - Yellow, 1 - Blue, 2 - Red, 3 - Green
 
-    short playOrder[4] = {0, 1, 2, 3};
+    short playOrder[4];
 
     srand(time(NULL));
 
-    strcpy(yellow.colour, "Yellow");
-    strcpy(blue.colour, "Blue");
-    strcpy(red.colour, "Red");
-    strcpy(green.colour, "Green");
+    strcpy(player[0].colour, "Yellow");
+    strcpy(player[1].colour, "Blue");
+    strcpy(player[2].colour, "Red");
+    strcpy(player[3].colour, "Green");
 
-    callingOrder(playOrder, &yellow.diceVal, &blue.diceVal, &red.diceVal, &green.diceVal);
+    player[0].letter = 'Y';
+    player[1].letter = 'B';
+    player[2].letter = 'R';
+    player[3].letter = 'G';
 
-    printf("Yellow 1 : %d\n", yellow.diceVal);
-    printf("Blue 1 : %d\n", blue.diceVal);
-    printf("Red 1 : %d\n", red.diceVal);
-    printf("Green 1 : %d\n\n", green.diceVal);
+    for(short i = 0; i < 4; i++)
+    {
+        printf("The %s player has four (04) pieces named %c1, %c2, %c3 and %c4.\n", player[i].colour, player[i].letter, player[i].letter, player[i].letter, player[i].letter);
+    }
+
+    printf("\n");
+
+    callingOrder(playOrder, &player[0].diceVal, &player[1].diceVal, &player[2].diceVal, &player[3].diceVal);
+
+    printf("Yellow 1 : %d\n", player[0].diceVal);
+    printf("Blue 1 : %d\n", player[1].diceVal);
+    printf("Red 1 : %d\n", player[2].diceVal);
+    printf("Green 1 : %d\n\n", player[3].diceVal);
 
     for(short a = 0; a < 4; a++)
     {

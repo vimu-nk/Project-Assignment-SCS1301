@@ -1,10 +1,10 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-struct player
+struct players
 {
     char colour[7];
-    short index;
+    char letter;
     short diceVal;
     short piece1;
     short piece1Dir;
@@ -19,6 +19,6 @@ struct player
 short diceRoll();
 short coinToss();
 
-void callingOrder(short order[], short *y, short *b, short *r, short *g);
+short callingOrder(short order[], short *y, short *b, short *r, short *g);
 
 #endif
