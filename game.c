@@ -6,21 +6,17 @@
 
 int main()
 {
-    struct players player[4]; //0 - Yellow, 1 - Blue, 2 - Red, 3 - Green
+    struct players player[4] =  //0 - Yellow, 1 - Blue, 2 - Red, 3 - Green
+    {
+        {"Yellow", 'Y', 0, -1, 0, -1, 0, -1, 0, -1, 0},
+        {"Blue", 'B', 0, -1, 0, -1, 0, -1, 0, -1, 0},
+        {"Red", 'R', 0, -1, 0, -1, 0, -1, 0, -1, 0},
+        {"Green", 'G', 0, -1, 0, -1, 0, -1, 0, -1, 0}
+    };
 
     short playOrder[4];
 
     srand(time(NULL));
-
-    strcpy(player[0].colour, "Yellow");
-    strcpy(player[1].colour, "Blue");
-    strcpy(player[2].colour, "Red");
-    strcpy(player[3].colour, "Green");
-
-    player[0].letter = 'Y';
-    player[1].letter = 'B';
-    player[2].letter = 'R';
-    player[3].letter = 'G';
 
     for(short i = 0; i < 4; i++)
     {
