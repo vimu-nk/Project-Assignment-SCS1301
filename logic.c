@@ -16,7 +16,7 @@ short coinToss()
 short callingOrder(short order[], short *y, short *b, short *r, short *g)
 {
     short rollVals[4];
-    short rollIDs[4];
+    short rollIDs[4] = {0, 1, 2, 3};
 
     *y = diceRoll();
     rollVals[0] = *y;
@@ -56,9 +56,11 @@ short callingOrder(short order[], short *y, short *b, short *r, short *g)
             order[x] = temp;
             temp = 0;
         }
-
-        order[x] = temp;
-        temp++;
+        else
+        {
+            order[x] = temp;
+            temp++;
+        }
     }
 
     printf("%d\n\n", firstPlayer);
