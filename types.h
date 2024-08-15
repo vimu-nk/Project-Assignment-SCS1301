@@ -7,10 +7,13 @@ struct player
     short index;
     short diceVal;
     short piece1;
+    short piece1Dir;
     short piece2;
+    short piece2Dir;
     short piece3;
+    short piece3Dir;
     short piece4;
-    short direction;
+    short piece4Dir;
 };
 
 short diceRoll();
