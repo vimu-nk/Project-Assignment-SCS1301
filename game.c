@@ -25,21 +25,19 @@ int main()
     for(short i = 0; i < 4; i++)
     {
         printf("The %s player has four (04) pieces named %c1, %c2, %c3 and %c4.\n", player[i].colour, player[i].letter, player[i].letter, player[i].letter, player[i].letter);
+        if(i == 3){printf("\n");}
     }
-
-    printf("\n");
 
     callingOrder(playOrder, &player[0].diceVal, &player[1].diceVal, &player[2].diceVal, &player[3].diceVal);
 
-    printf("Yellow 1 : %d\n", player[0].diceVal);
-    printf("Blue 1 : %d\n", player[1].diceVal);
-    printf("Red 1 : %d\n", player[2].diceVal);
-    printf("Green 1 : %d\n\n", player[3].diceVal);
-
-    for(short a = 0; a < 4; a++)
+    for(short i = 0; i < 4; i++)
     {
-        printf("%d\n", playOrder[a]);
+        printf("%s rolls %d\n", player[i].colour, player[i].diceVal);
+        if(i == 3){printf("\n");}
     }
+
+    printf("%s has the highest roll and will begin the game.\n", player[playOrder[0]].colour);
+    printf("The order of a single round is %s, %s, %s, and %s.\n", player[playOrder[0]].colour, player[playOrder[1]].colour, player[playOrder[2]].colour, player[playOrder[3]].colour);
 
     return 0;
 }

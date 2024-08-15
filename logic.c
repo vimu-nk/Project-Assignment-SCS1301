@@ -13,7 +13,7 @@ short coinToss()
     return rand() % 2;
 }
 
-short callingOrder(short order[], short *y, short *b, short *r, short *g)
+void callingOrder(short order[], short *y, short *b, short *r, short *g)
 {
     short rollVals[4];
     short rollIDs[4] = {0, 1, 2, 3};
@@ -62,10 +62,6 @@ short callingOrder(short order[], short *y, short *b, short *r, short *g)
             temp++;
         }
     }
-
-    printf("%d\n\n", firstPlayer);
-
-    return firstPlayer;
 }
 
 

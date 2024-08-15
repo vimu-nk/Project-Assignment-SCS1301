@@ -19,6 +19,6 @@ struct players
 short diceRoll();
 short coinToss();
 
-short callingOrder(short order[], short *y, short *b, short *r, short *g);
+void callingOrder(short order[], short *y, short *b, short *r, short *g);
 
 #endif
