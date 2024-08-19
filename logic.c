@@ -64,5 +64,30 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g)
     }
 }
 
+short standardNotEmpty(short *y, short *b, short *r, short *g) //Check if the standard path has at least one piece
+{
+    return (*y == 0) || (*b == 0) || (*r == 0) || (*g == 0);
+}
 
+void setCellX(short index, short *piece)
+{
+    switch(index)
+    {
+        case 0:
+            *piece = 2;
+            break;
+
+        case 1:
+            *piece = 15;
+            break;
+
+        case 2:
+            *piece = 28;
+            break;
+
+        case 3:
+            *piece = 41;
+            break;
+    }
+}
 
