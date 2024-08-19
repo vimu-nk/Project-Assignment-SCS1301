@@ -25,6 +25,8 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g);
 
 short standardNotEmpty(short *y, short *b, short *r, short *g);
 
-void setCellX(short index, short *piece);
+void setCellX(short index, struct players *player);
+
+void printCellX(struct players *player);
 
 #endif

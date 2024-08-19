@@ -66,28 +66,44 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g)
 
 short standardNotEmpty(short *y, short *b, short *r, short *g) //Check if the standard path has at least one piece
 {
-    return (*y == 0) || (*b == 0) || (*r == 0) || (*g == 0);
+    return (*y != 4) || (*b != 4) || (*r != 4) || (*g != 4);
 }
 
-void setCellX(short index, short *piece)
+void setCellX(short index, struct players *player) //Setting a piece to respective cell X
 {
+    short pieceID = 4 - player -> piecesBase;
+
     switch(index)
     {
         case 0:
-            *piece = 2;
+            player -> pieces[pieceID].position = 2;
             break;
 
         case 1:
-            *piece = 15;
+            player -> pieces[pieceID].position = 15;
             break;
 
         case 2:
-            *piece = 28;
+            player -> pieces[pieceID].position = 28;
             break;
 
         case 3:
-            *piece = 41;
+            player -> pieces[pieceID].position = 41;
             break;
     }
+
+    player -> piecesBase -= 1;
+}
+
+void printCellX(struct players *player)
+{
+    printf("%s player moves piece %c%d to the starting point.\n",
+    player -> colour,
+    player -> letter,
+    4 - player -> piecesBase);
+    printf("%s player now has %d/4 pieces on the board and %d/4 pieces on the base.\n\n",
+    player -> colour,
+    4 - player -> piecesBase,
+    player -> piecesBase);
 }
 
