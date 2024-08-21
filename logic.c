@@ -13,6 +13,11 @@ short coinToss()
     return rand() % 2;
 }
 
+short choosePiece(short x)
+{
+    return rand() % x;
+}
+
 void callingOrder(short order[], short *y, short *b, short *r, short *g)
 {
     short rollVals[4];
@@ -95,7 +100,7 @@ void setCellX(short index, struct players *player) //Setting a piece to respecti
     player -> piecesBase -= 1;
 }
 
-void printCellX(struct players *player)
+void printCellX(struct players *player) //Printng the ststus when a piece go to the X
 {
     printf("%s player moves piece %c%d to the starting point.\n",
     player -> colour,
@@ -106,4 +111,42 @@ void printCellX(struct players *player)
     4 - player -> piecesBase,
     player -> piecesBase);
 }
+
+void pieceMove(short index, struct players *player)
+{
+    player -> diceVal = diceRoll();
+    short previous = player -> pieces[index].position;
+    short pieceID = choosePiece(3 - player -> piecesBase);
+
+    if(player -> diceVal == 6 && coinToss() == 0 && player -> piecesBase != 0)
+    {
+        setCellX(index, &player[index]);
+        printCellX(&player[index]);
+    }
+    else
+    {
+        switch(index)
+        {
+            case 0:
+                if(player -> pieces[pieceID].position == 0)
+                {
+                    player -> pieces[index].position = 100 + player -> diceVal;
+                }
+                else if(51 - player -> pieces[pieceID].position < player -> diceVal);
+                {
+                    
+                }
+        }
+    }
+    
+    printf("%s moves %c%d from location L%d to L%d by %d units in %s.",
+    player -> colour,
+    player -> letter,
+    index,
+    previous,
+    player -> pieces[index].position,
+    player -> diceVal,
+    player -> pieces[index].pieceDir == 0 ? "clockwise" : "counter-clockwise");
+}
+
 
