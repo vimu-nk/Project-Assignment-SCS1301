@@ -114,9 +114,16 @@ void printCellX(struct players *player) //Printng the ststus when a piece go to 
 
 void pieceMove(short index, struct players *player)
 {
+    short pieceID;
+
     player -> diceVal = diceRoll();
-    short previous = player -> pieces[index].position;
-    short pieceID = choosePiece(3 - player -> piecesBase);
+
+    do
+    {
+        short pieceID = choosePiece(4 - player -> piecesBase); //Randomly choosing a piece to move
+    } while (!(106 - player -> pieces[pieceID].position == player -> diceVal)); //Checking the piece of the given ID is on the home path and can be movable with the respective player's dice value and if it is not, the process will looping until a movable piece is found.
+    
+    short previous = player -> pieces[pieceID].position; //Storing previous cell value of the respective piece
 
     if(player -> diceVal == 6 && coinToss() == 0 && player -> piecesBase != 0)
     {
@@ -128,13 +135,17 @@ void pieceMove(short index, struct players *player)
         switch(index)
         {
             case 0:
-                if(player -> pieces[pieceID].position == 0)
+                if(previous == 0)
                 {
-                    player -> pieces[index].position = 100 + player -> diceVal;
+                    player -> pieces[pieceID].position = 100 + player -> diceVal;
                 }
-                else if(51 - player -> pieces[pieceID].position < player -> diceVal);
+                else if(51 - previous < player -> diceVal)
                 {
-                    
+                    player -> pieces[pieceID].position = player -> diceVal - (51 - previous);
+                }
+                else
+                {
+                    player -> pieces[pieceID].position = (previous + player -> diceVal) % 52;
                 }
         }
     }
