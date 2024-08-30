@@ -15,25 +15,25 @@ short coinToss()
 
 short choosePiece(short x)
 {
-    return rand() % x;
+    return (rand() % x);
 }
 
-void callingOrder(short order[], short *y, short *b, short *r, short *g)
+void callingOrder(short order[], struct players *player)
 {
-    short rollVals[4];
-    short rollIDs[4] = {0, 1, 2, 3};
+    short rollVals[MAX_PLAYERS];
+    short rollIDs[MAX_PLAYERS] = {0, 1, 2, 3};
 
-    *y = diceRoll();
-    rollVals[0] = *y;
+    player[0].diceVal = diceRoll();
+    rollVals[0] = player[0].diceVal;
 
-    *b = diceRoll();
-    rollVals[1] = *b;
+    player[1].diceVal = diceRoll();
+    rollVals[1] = player[1].diceVal;
 
-    *r = diceRoll();
-    rollVals[2] = *r;
+    player[2].diceVal = diceRoll();
+    rollVals[2] = player[2].diceVal;
     
-    *g = diceRoll();
-    rollVals[3] = *g;
+    player[3].diceVal = diceRoll();
+    rollVals[3] = player[3].diceVal;
 
     for(short i = 0; i < 3; i++)
     {
@@ -69,95 +69,145 @@ void callingOrder(short order[], short *y, short *b, short *r, short *g)
     }
 }
 
-short standardNotEmpty(short *y, short *b, short *r, short *g) //Check if the standard path has at least one piece
+short standardNotEmpty(struct players *player) //Check if the standard path has at least one piece
 {
-    return (*y != 4) || (*b != 4) || (*r != 4) || (*g != 4);
+    return (player[0].piecesBase != MAX_PIECES_PER_PLAYER) || (player[1].piecesBase != MAX_PIECES_PER_PLAYER) || (player[2].piecesBase != MAX_PIECES_PER_PLAYER) || (player[3].piecesBase != MAX_PIECES_PER_PLAYER);
 }
 
 void setCellX(short index, struct players *player) //Setting a piece to respective cell X
 {
-    short pieceID = 4 - player -> piecesBase;
+    short pieceID = MAX_PIECES_PER_PLAYER - player[index].piecesBase;
 
     switch(index)
     {
         case 0:
-            player -> pieces[pieceID].position = 2;
+            player[index].pieces[pieceID].position = 2;
             break;
 
         case 1:
-            player -> pieces[pieceID].position = 15;
+            player[index].pieces[pieceID].position = 15;
             break;
 
         case 2:
-            player -> pieces[pieceID].position = 28;
+            player[index].pieces[pieceID].position = 28;
             break;
 
         case 3:
-            player -> pieces[pieceID].position = 41;
+            player[index].pieces[pieceID].position = 41;
             break;
     }
 
-    player -> piecesBase -= 1;
+    player[index].piecesBase--;
 }
 
-void printCellX(struct players *player) //Printng the ststus when a piece go to the X
+void printCellX(short index, struct players *player) //Printng the ststus when a piece go to the X
 {
     printf("%s player moves piece %c%d to the starting point.\n",
-    player -> colour,
-    player -> letter,
-    4 - player -> piecesBase);
-    printf("%s player now has %d/4 pieces on the board and %d/4 pieces on the base.\n\n",
-    player -> colour,
-    4 - player -> piecesBase,
-    player -> piecesBase);
+    player[index].colour,
+    player[index].letter,
+    MAX_PIECES_PER_PLAYER - player[index].piecesBase);
+    printf("%s player now has %d/4 pieces on the board and %d/4 pieces on the base.\n",
+    player[index].colour,
+    MAX_PIECES_PER_PLAYER - player[index].piecesBase,
+    player[index].piecesBase);
+}
+
+void printStatus(struct players *player)
+{
+    printf("\033[0;33m%s\033[0m\t\t\t\033[0;34m%s\t\t\t\033[0m\033[0;31m%s\t\t\t\033[0;32m%s\033[0m\n",
+    player[0].colour,
+    player[1].colour,
+    player[2].colour,
+    player[3].colour);
+
+    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
+    player[0].pieces[0].position,
+    player[1].pieces[0].position,
+    player[2].pieces[0].position,
+    player[3].pieces[0].position);
+
+    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
+    player[0].pieces[1].position,
+    player[1].pieces[1].position,
+    player[2].pieces[1].position,
+    player[3].pieces[1].position);
+
+    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
+    player[0].pieces[2].position,
+    player[1].pieces[2].position,
+    player[2].pieces[2].position,
+    player[3].pieces[2].position);
+
+    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
+    player[0].pieces[3].position,
+    player[1].pieces[3].position,
+    player[2].pieces[3].position,
+    player[3].pieces[3].position);
+
+    printf("\033[0;33mBase : %d\033[0m\t\t\033[0;34mBase : %d\033[0m\t\t\033[0;31mBase : %d\033[0m\t\t\033[0;32mBase : %d\033[0m\n",
+    player[0].piecesBase,
+    player[1].piecesBase,
+    player[2].piecesBase,
+    player[3].piecesBase);
+}
+
+void printPieceMove(short index, short pieceID, short previous, struct players *player)
+{
+    printf("%s moves %c%d from location L%d to L%d by %d units in %s.\n",
+    player[index].colour,
+    player[index].letter,
+    pieceID + 1,
+    previous,
+    player[index].pieces[pieceID].position,
+    player[index].diceVal,
+    player[index].pieces[pieceID].pieceDir == 0 ? "clockwise" : "counter-clockwise");
 }
 
 void pieceMove(short index, struct players *player)
 {
     short pieceID;
 
-    player -> diceVal = diceRoll();
-
-    do
-    {
-        short pieceID = choosePiece(4 - player -> piecesBase); //Randomly choosing a piece to move
-    } while (!(106 - player -> pieces[pieceID].position == player -> diceVal)); //Checking the piece of the given ID is on the home path and can be movable with the respective player's dice value and if it is not, the process will looping until a movable piece is found.
+    player[index].diceVal = diceRoll();
+    printf("%s rolls %d\n", player[index].colour, player[index].diceVal);
     
-    short previous = player -> pieces[pieceID].position; //Storing previous cell value of the respective piece
-
-    if(player -> diceVal == 6 && coinToss() == 0 && player -> piecesBase != 0)
+    if(player[index].piecesBase != 4)
     {
-        setCellX(index, &player[index]);
-        printCellX(&player[index]);
+        do
+        {
+            pieceID = choosePiece(MAX_PIECES_PER_PLAYER - player[index].piecesBase); //Randomly choosing a piece to move
+        } while (106 - player[index].pieces[pieceID].position <= player[index].diceVal); //Checking if the piece of the given ID is on the home path and can be movable with the respective player's dice value and if it is not, the process will looping until a movable piece is found.
     }
-    else
+    
+    short previous = player[index].pieces[pieceID].position; //Storing previous cell value of the respective piece
+
+    if((player[index].diceVal == 6 && coinToss() == 0) || (player[index].diceVal == 6 && player[index].piecesBase == 4))
+    {
+        setCellX(index, player);
+        printCellX(index, player);
+    }
+    else if(player[index].piecesBase != 4)
     {
         switch(index)
         {
             case 0:
                 if(previous == 0)
                 {
-                    player -> pieces[pieceID].position = 100 + player -> diceVal;
+                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
                 }
-                else if(51 - previous < player -> diceVal)
+                else if(51 - previous < player[index].diceVal)
                 {
-                    player -> pieces[pieceID].position = player -> diceVal - (51 - previous);
+                    player[index].pieces[pieceID].position = 100 + player[index].diceVal - (51 - previous);
                 }
                 else
                 {
-                    player -> pieces[pieceID].position = (previous + player -> diceVal) % 52;
+                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
                 }
+
+                printPieceMove(0, pieceID, previous, player);
+
+                break;
         }
     }
-    
-    printf("%s moves %c%d from location L%d to L%d by %d units in %s.",
-    player -> colour,
-    player -> letter,
-    index,
-    previous,
-    player -> pieces[index].position,
-    player -> diceVal,
-    player -> pieces[index].pieceDir == 0 ? "clockwise" : "counter-clockwise");
 }
 
 
