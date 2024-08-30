@@ -360,6 +360,7 @@ void pieceMove(short index, struct players *player)
                 printPieceMove(index, pieceID, previous, player);
 
                 break;
+        }
     }
 }
 
