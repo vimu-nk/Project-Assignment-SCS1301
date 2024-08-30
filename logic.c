@@ -170,7 +170,7 @@ void pieceMove(short index, struct players *player)
     player[index].diceVal = diceRoll();
     printf("%s rolls %d\n", player[index].colour, player[index].diceVal);
     
-    if(player[index].piecesBase != 4)
+    if(player[index].piecesBase != 4 || player[index].piecesHome != 4)
     {
         do
         {
@@ -200,10 +200,64 @@ void pieceMove(short index, struct players *player)
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
+                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
                 }
 
                 printPieceMove(0, pieceID, previous, player);
+
+                break;
+            
+            case 1:
+                if(previous == 13)
+                {
+                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                }
+                else if(51 - previous < player[index].diceVal)
+                {
+                    player[index].pieces[pieceID].position = player[index].diceVal - (51 - previous);
+                }
+                else
+                {
+                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                }
+                
+                printPieceMove(1, pieceID, previous, player);
+
+                break;
+
+            case 2:
+                if(previous == 26)
+                {
+                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                }
+                else if(51 - previous < player[index].diceVal)
+                {
+                    player[index].pieces[pieceID].position = player[index].diceVal - (51 - previous);
+                }
+                else
+                {
+                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                }
+
+                printPieceMove(2, pieceID, previous, player);
+
+                break;
+            
+            case 3:
+                if(previous == 39)
+                {
+                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                }
+                else if(51 - previous < player[index].diceVal)
+                {
+                    player[index].pieces[pieceID].position = player[index].diceVal - (51 - previous);
+                }
+                else
+                {
+                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                }
+
+                printPieceMove(3, pieceID, previous, player);
 
                 break;
         }
