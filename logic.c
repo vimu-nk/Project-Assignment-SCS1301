@@ -114,7 +114,7 @@ void printCellX(short index, struct players *player) //Printng the ststus when a
 
 void printStatus(struct players *player)
 {
-    printf("\033[0;33m%s\033[0m\t\t\t\033[0;34m%s\t\t\t\033[0m\033[0;31m%s\t\t\t\033[0;32m%s\033[0m\n",
+    printf("\n\033[0;33m%s\033[0m\t\t\t\033[0;34m%s\t\t\t\033[0m\033[0;31m%s\t\t\t\033[0;32m%s\033[0m\n",
     player[0].colour,
     player[1].colour,
     player[2].colour,
@@ -170,7 +170,7 @@ void pieceMove(short index, struct players *player)
     player[index].diceVal = diceRoll();
     printf("%s rolls %d\n", player[index].colour, player[index].diceVal);
     
-    if(player[index].piecesBase != 4 || player[index].piecesHome != 4)
+    if(player[index].piecesBase != 4)
     {
         do
         {
@@ -190,77 +190,176 @@ void pieceMove(short index, struct players *player)
         switch(index)
         {
             case 0:
-                if(previous == 0)
+                if(previous >= 0 && previous <= 51)
                 {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
-                }
-                else if(51 - previous < player[index].diceVal)
-                {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal - (51 - previous);
+                    if(previous == 0)
+                    {
+                        player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                        if(player[index].pieces[pieceID].position == 106)
+                        {
+                            player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                            player[index].piecesHome++;
+                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            player[index].colour,
+                            player[index].letter,
+                            pieceID);
+                        }
+                    }
+                    else if(((52 - previous) < player[index].diceVal) && previous >= 47)
+                    {
+                        player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (52 - previous));
+                    }
+                    else
+                    {
+                        player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
+                    }
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    if(player[index].pieces[pieceID].position == 106)
+                    {
+                        player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                        player[index].piecesHome++;
+                        printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                        player[index].colour,
+                        player[index].letter,
+                        pieceID);
+                    }
                 }
 
-                printPieceMove(0, pieceID, previous, player);
+                printPieceMove(index, pieceID, previous, player);
 
                 break;
-            
+
             case 1:
-                if(previous == 13)
+                if(previous >= 0 && previous <= 51)
                 {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
-                }
-                else if(51 - previous < player[index].diceVal)
-                {
-                    player[index].pieces[pieceID].position = player[index].diceVal - (51 - previous);
+                    if(previous == 13)
+                    {
+                        player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                        if(player[index].pieces[pieceID].position == 106)
+                        {
+                            player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                            player[index].piecesHome++;
+                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            player[index].colour,
+                            player[index].letter,
+                            pieceID);
+                        }
+                    }
+                    else if(((13 - previous) < player[index].diceVal) && previous >= 8)
+                    {
+                        player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (13 - previous));
+                    }
+                    else
+                    {
+                        player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
+                    }
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    if(player[index].pieces[pieceID].position == 106)
+                    {
+                        player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                        player[index].piecesHome++;
+                        printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
+                        player[index].colour,
+                        player[index].letter,
+                        pieceID);
+                    }
                 }
-                
-                printPieceMove(1, pieceID, previous, player);
+
+                printPieceMove(index, pieceID, previous, player);
 
                 break;
 
             case 2:
-                if(previous == 26)
+                if(previous >= 0 && previous <= 51)
                 {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
-                }
-                else if(51 - previous < player[index].diceVal)
-                {
-                    player[index].pieces[pieceID].position = player[index].diceVal - (51 - previous);
+                    if(previous == 26)
+                    {
+                        player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                        if(player[index].pieces[pieceID].position == 106)
+                        {
+                            player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                            player[index].piecesHome++;
+                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            player[index].colour,
+                            player[index].letter,
+                            pieceID);
+                        }
+                    }
+                    else if(((26 - previous) < player[index].diceVal) && previous >= 21)
+                    {
+                        player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (26 - previous));
+                    }
+                    else
+                    {
+                        player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
+                    }
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    if(player[index].pieces[pieceID].position == 106)
+                    {
+                        player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                        player[index].piecesHome++;
+                        printf("\n" RED "%s piece %c%d entered home." RESET "\n",
+                        player[index].colour,
+                        player[index].letter,
+                        pieceID);
+                    }
                 }
 
-                printPieceMove(2, pieceID, previous, player);
+                printPieceMove(index, pieceID, previous, player);
 
                 break;
-            
+
             case 3:
-                if(previous == 39)
+                if(previous >= 0 && previous <= 51)
                 {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
-                }
-                else if(51 - previous < player[index].diceVal)
-                {
-                    player[index].pieces[pieceID].position = player[index].diceVal - (51 - previous);
+                    if(previous == 39)
+                    {
+                        player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                        if(player[index].pieces[pieceID].position == 106)
+                        {
+                            player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                            player[index].piecesHome++;
+                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            player[index].colour,
+                            player[index].letter,
+                            pieceID);
+                        }
+                    }
+                    else if(((39 - previous) < player[index].diceVal) && previous >= 34)
+                    {
+                        player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (39 - previous));
+                    }
+                    else
+                    {
+                        player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
+                    }
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 51;
+                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    if(player[index].pieces[pieceID].position == 106)
+                    {
+                        player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                        player[index].piecesHome++;
+                        printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
+                        player[index].colour,
+                        player[index].letter,
+                        pieceID);
+                    }
                 }
 
-                printPieceMove(3, pieceID, previous, player);
+                printPieceMove(index, pieceID, previous, player);
 
                 break;
-        }
     }
 }
 
