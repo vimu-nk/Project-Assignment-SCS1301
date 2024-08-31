@@ -13,11 +13,6 @@ short coinToss()
     return rand() % 2;
 }
 
-short choosePiece(short x)
-{
-    return (rand() % x);
-}
-
 void callingOrder(short order[], struct players *player)
 {
     short rollVals[MAX_PLAYERS];
@@ -74,9 +69,20 @@ short standardNotEmpty(struct players *player) //Check if the standard path has 
     return (player[0].piecesBase != MAX_PIECES_PER_PLAYER) || (player[1].piecesBase != MAX_PIECES_PER_PLAYER) || (player[2].piecesBase != MAX_PIECES_PER_PLAYER) || (player[3].piecesBase != MAX_PIECES_PER_PLAYER);
 }
 
+short searchPieceX(short index, struct players *player)
+{
+    for(short i = 0; i < MAX_PIECES_PER_PLAYER; i++)
+    {
+        if(player[index].pieces[i].position == -1)
+        {
+            return i;
+        }
+    }
+}
+
 void setCellX(short index, struct players *player) //Setting a piece to respective cell X
 {
-    short pieceID = MAX_PIECES_PER_PLAYER - player[index].piecesBase;
+    short pieceID = searchPieceX(index, player);
 
     switch(index)
     {
@@ -97,6 +103,7 @@ void setCellX(short index, struct players *player) //Setting a piece to respecti
             break;
     }
 
+    player[index].piecesStdIndexes[MAX_PIECES_PER_PLAYER - player[index].piecesBase] = pieceID;
     player[index].piecesBase--;
 }
 
@@ -163,29 +170,59 @@ void printPieceMove(short index, short pieceID, short previous, struct players *
     player[index].pieces[pieceID].pieceDir == 0 ? "clockwise" : "counter-clockwise");
 }
 
+short choosePiece(short index, struct players *player)
+{
+    short isMovable = 0;
+    short ID;
+
+    while(!isMovable)
+    {
+        short x = rand() % 4;
+        if(player[index].piecesStdIndexes[x] != -1)
+        {
+            ID = player[index].piecesStdIndexes[x];
+            if(player[index].pieces[ID].position > 100)
+            {
+                if((player[index].pieces[ID].position + player[index].diceVal) <= 106)
+                {
+                    isMovable = 1;
+                    return ID;
+                }
+            }
+            else
+            {
+                isMovable = 1;
+                return ID;
+            }
+        }
+    }
+}
+
 void pieceMove(short index, struct players *player)
 {
     short pieceID;
+    short isMovePossible = 1;
 
     player[index].diceVal = diceRoll();
     printf("%s rolls %d\n", player[index].colour, player[index].diceVal);
-    
-    if(player[index].piecesBase != 4)
+
+    if(player[index].piecesBase != 4 && player[index].piecesHome != 4)
     {
-        do
-        {
-            pieceID = choosePiece(MAX_PIECES_PER_PLAYER - player[index].piecesBase); //Randomly choosing a piece to move
-        } while (106 - player[index].pieces[pieceID].position <= player[index].diceVal); //Checking if the piece of the given ID is on the home path and can be movable with the respective player's dice value and if it is not, the process will looping until a movable piece is found.
+        pieceID = choosePiece(index, player);
     }
-    
+    else
+    {
+        return;
+    }
+
     short previous = player[index].pieces[pieceID].position; //Storing previous cell value of the respective piece
 
-    if((player[index].diceVal == 6 && coinToss() == 0) || (player[index].diceVal == 6 && player[index].piecesBase == 4))
+    if((player[index].diceVal == 6 && coinToss() == 0) || (player[index].diceVal == 6 && player[index].piecesBase == MAX_PIECES_PER_PLAYER))
     {
         setCellX(index, player);
         printCellX(index, player);
     }
-    else if(player[index].piecesBase != 4)
+    else if(player[index].piecesBase != 4 && isMovePossible == 1)
     {
         switch(index)
         {
@@ -202,10 +239,10 @@ void pieceMove(short index, struct players *player)
                             printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
-                            pieceID);
+                            pieceID + 1);
                         }
                     }
-                    else if(((52 - previous) < player[index].diceVal) && previous >= 47)
+                    else if(previous < 52 && ((previous + player[index].diceVal) > 52))
                     {
                         player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (52 - previous));
                     }
@@ -216,7 +253,7 @@ void pieceMove(short index, struct players *player)
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    player[index].pieces[pieceID].position += player[index].diceVal;
                     if(player[index].pieces[pieceID].position == 106)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
@@ -224,7 +261,7 @@ void pieceMove(short index, struct players *player)
                         printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
-                        pieceID);
+                        pieceID + 1);
                     }
                 }
 
@@ -245,10 +282,10 @@ void pieceMove(short index, struct players *player)
                             printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
-                            pieceID);
+                            pieceID + 1);
                         }
                     }
-                    else if(((13 - previous) < player[index].diceVal) && previous >= 8)
+                    else if(previous < 13 && ((previous + player[index].diceVal) > 13))
                     {
                         player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (13 - previous));
                     }
@@ -259,7 +296,7 @@ void pieceMove(short index, struct players *player)
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    player[index].pieces[pieceID].position += player[index].diceVal;
                     if(player[index].pieces[pieceID].position == 106)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
@@ -267,7 +304,7 @@ void pieceMove(short index, struct players *player)
                         printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
-                        pieceID);
+                        pieceID + 1);
                     }
                 }
 
@@ -288,10 +325,10 @@ void pieceMove(short index, struct players *player)
                             printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
-                            pieceID);
+                            pieceID + 1);
                         }
                     }
-                    else if(((26 - previous) < player[index].diceVal) && previous >= 21)
+                    else if(previous < 26 && ((previous + player[index].diceVal) > 26))
                     {
                         player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (26 - previous));
                     }
@@ -302,7 +339,7 @@ void pieceMove(short index, struct players *player)
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    player[index].pieces[pieceID].position += player[index].diceVal;
                     if(player[index].pieces[pieceID].position == 106)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
@@ -310,7 +347,7 @@ void pieceMove(short index, struct players *player)
                         printf("\n" RED "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
-                        pieceID);
+                        pieceID + 1);
                     }
                 }
 
@@ -331,10 +368,10 @@ void pieceMove(short index, struct players *player)
                             printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
-                            pieceID);
+                            pieceID + 1);
                         }
                     }
-                    else if(((39 - previous) < player[index].diceVal) && previous >= 34)
+                    else if(previous < 39 && ((previous + player[index].diceVal) > 39))
                     {
                         player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (39 - previous));
                     }
@@ -345,7 +382,7 @@ void pieceMove(short index, struct players *player)
                 }
                 else
                 {
-                    player[index].pieces[pieceID].position = player[index].diceVal;
+                    player[index].pieces[pieceID].position += player[index].diceVal;
                     if(player[index].pieces[pieceID].position == 106)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
@@ -353,7 +390,7 @@ void pieceMove(short index, struct players *player)
                         printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
-                        pieceID);
+                        pieceID + 1);
                     }
                 }
 

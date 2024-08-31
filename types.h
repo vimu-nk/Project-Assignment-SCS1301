@@ -25,14 +25,13 @@ struct players
     struct playerPieces pieces[4];
     short piecesBase;
     short piecesHome;
+    short piecesStdIndexes[4];
     short piecesHomeIndexes[4];
 };
 
 short diceRoll();
 
 short coinToss();
-
-short choosePiece(short x);
 
 void callingOrder(short order[], struct players *player);
 
@@ -43,6 +42,8 @@ void setCellX(short index, struct players *player);
 void printCellX(short index, struct players *player);
 
 void printStatus(struct players *player);
+
+short choosePiece(short index, struct players *player);
 
 void pieceMove(short index, struct players *player);
 
