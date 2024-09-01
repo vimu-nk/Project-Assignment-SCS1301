@@ -15,6 +15,7 @@ struct playerPieces
     short index;
     short position;
     short pieceDir;
+    short preValue;
 };
 
 struct players
@@ -27,7 +28,10 @@ struct players
     short piecesHome;
     short piecesStdIndexes[4];
     short piecesHomeIndexes[4];
+    short prevPieceID;
 };
+
+void gameLoop();
 
 short diceRoll();
 
@@ -43,7 +47,7 @@ void printCellX(short index, struct players *player);
 
 void printStatus(struct players *player);
 
-short choosePiece(short index, struct players *player);
+short yellowBehaviour(short index, struct players *player);
 
 void pieceMove(short index, struct players *player);
 
