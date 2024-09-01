@@ -247,41 +247,37 @@ void printCellX(short index, struct players *player) //Printng the ststus when a
 
 void printStatus(struct players *player)
 {
-    printf("\n\033[0;33m%s\033[0m\t\t\t\033[0;34m%s\t\t\t\033[0m\033[0;31m%s\t\t\t\033[0;32m%s\033[0m\n",
-    player[0].colour,
-    player[1].colour,
-    player[2].colour,
-    player[3].colour);
-
-    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
-    player[0].pieces[0].position,
-    player[1].pieces[0].position,
-    player[2].pieces[0].position,
-    player[3].pieces[0].position);
-
-    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
-    player[0].pieces[1].position,
-    player[1].pieces[1].position,
-    player[2].pieces[1].position,
-    player[3].pieces[1].position);
-
-    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
-    player[0].pieces[2].position,
-    player[1].pieces[2].position,
-    player[2].pieces[2].position,
-    player[3].pieces[2].position);
-
-    printf("\033[0;33mPiece 1 : %d\033[0m\t\t\033[0;34mPiece 1 : %d\033[0m\t\t\033[0m\033[0;31mPiece 1 : %d\t\t\033[0;32mPiece 1 : %d\033[0m\n",
-    player[0].pieces[3].position,
-    player[1].pieces[3].position,
-    player[2].pieces[3].position,
-    player[3].pieces[3].position);
-
-    printf("\033[0;33mBase : %d\033[0m\t\t\033[0;34mBase : %d\033[0m\t\t\033[0;31mBase : %d\033[0m\t\t\033[0;32mBase : %d\033[0m\n",
-    player[0].piecesBase,
-    player[1].piecesBase,
-    player[2].piecesBase,
-    player[3].piecesBase);
+    for(short i = 0; i < MAX_PLAYERS; i++)
+    {
+        printf("\n%s player now has %d/4 pieces on the board and %d/4 pieces on the base.\n",
+        player[i].colour,
+        MAX_PIECES_PER_PLAYER - player[i].piecesBase,
+        player[i].piecesBase);
+        printf("=========================================================================\n");
+        printf("Location of pieces %s\n",
+        player[i].colour);
+        printf("=========================================================================\n");
+        for(short j = 0; j < MAX_PIECES_PER_PLAYER; j++)
+        {
+            printf("Piece %d -> ", j + 1);
+            if(player[i].pieces[j].position == -1)
+            {
+                printf("In Base\n");
+            }
+            else if(player[i].pieces[j].position > 100 && player[i].pieces[j].position < 106)
+            {
+                printf("Home Straight Cell %d\n", player[i].pieces[j].position - 100);
+            }
+            else if(player[i].pieces[j].position == 106)
+            {
+                printf("In Home\n");
+            }
+            else
+            {
+                printf("L%d\n", player[i].pieces[j].position);
+            }
+        }
+    }
 }
 
 void printPieceMove(short index, short pieceID, short previous, struct players *player)
@@ -647,7 +643,7 @@ void pieceMove(short index, struct players *player)
                         {
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
-                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            printf("\n" RED "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
                             pieceID + 1);
@@ -704,7 +700,7 @@ void pieceMove(short index, struct players *player)
                         {
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
-                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            printf("\n" GREEN "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
                             pieceID + 1);
@@ -726,7 +722,7 @@ void pieceMove(short index, struct players *player)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
-                        printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
+                        printf("\n" GREEN "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
                         pieceID + 1);
