@@ -7,10 +7,10 @@ void gameLoop()
 {
     struct players player[MAX_PLAYERS] =  //0 - Yellow, 1 - Blue, 2 - Red, 3 - Green
     {
-        {"Yellow", 'Y', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}, 0},
-        {"Blue", 'B', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}, 0},
-        {"Red", 'R', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}, 0},
-        {"Green", 'G', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}, 0}
+        {"Yellow", 'Y', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}},
+        {"Blue", 'B', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}},
+        {"Red", 'R', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}},
+        {"Green", 'G', 0, {{1, -1, 0, -1}, {2, -1, 0, -1}, {3, -1, 0, -1}, {4, -1, 0, -1}}, 4, 0, {-1, -1, -1, -1}, {-1, -1, -1, -1}}
     };
 
     short playOrder[MAX_PLAYERS];
@@ -103,9 +103,9 @@ void gameLoop()
     
     int count = 1;
 
-    for(int x = 0; x < 1000; x++)
+    while(1)
     {
-        printf("Round : %d\n\n", count);
+        printf("\nRound : %d\n\n", count);
 
         for(int i = 0; i < MAX_PLAYERS; i++)
         {
@@ -117,7 +117,15 @@ void gameLoop()
 
         count++;
 
-        getchar();
+        short winner = winCheck(player);
+
+        if(winner != -1)
+        {
+            printf("\n%s player win the game!\n", player[winner].colour);
+            break;
+        }
+
+        //getchar();
     }
 }
 
@@ -288,7 +296,168 @@ void printPieceMove(short index, short pieceID, short previous, struct players *
     player[index].pieces[pieceID].pieceDir == 0 ? "clockwise" : "counter-clockwise");
 }
 
+short winCheck(struct players *player)
+{
+    short homeCount;
+    for(short i = 0; i < MAX_PLAYERS; i++)
+    {
+        homeCount = 0;
+        for(short j = 0; j < MAX_PIECES_PER_PLAYER; j++)
+        {
+            if(player[i].pieces[j].position == 106)
+            {
+                homeCount++;
+            }
+        }
+        
+        if(homeCount == 4)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 short yellowBehaviour(short index, struct players *player)
+{
+    short ID = -1; //changed
+
+    if(player[index].piecesBase > 0 && player[index].diceVal == 6)
+    {
+        setCellX(index, player);
+        printCellX(index, player);
+    }
+    else if(player[index].piecesHome != 4)
+    {
+        while(1)
+        {
+            short x = rand() % 4;
+            if(player[index].piecesStdIndexes[x] != -1 && (player[index].pieces[player[index].piecesStdIndexes[x]].position != 106 || ((player[index].pieces[x].position + player[index].diceVal) <= 106)))
+            {
+                short y = player[index].piecesStdIndexes[x];
+                if(player[index].pieces[y].position > 100)
+                {
+                    if((player[index].pieces[y].position + player[index].diceVal) <= 106)
+                    {
+                        ID = y;
+                        break;
+                    }
+                    else
+                    {
+                        //return ID;
+                        break;
+                    }
+                }
+                else
+                {
+                    ID = y;
+                    break;
+                }
+            }
+            else
+            {
+                return ID;
+            }
+        }
+    }
+
+    return ID;
+}
+
+short blueBehaviour(short index, struct players *player)
+{
+    short ID = -1; //changed
+
+    if(player[index].piecesBase > 0 && player[index].diceVal == 6)
+    {
+        setCellX(index, player);
+        printCellX(index, player);
+    }
+    else if(player[index].piecesHome != 4)
+    {
+        while(1)
+        {
+            short x = rand() % 4;
+            if(player[index].piecesStdIndexes[x] != -1 && (player[index].pieces[player[index].piecesStdIndexes[x]].position != 106 || ((player[index].pieces[x].position + player[index].diceVal) <= 106)))
+            {
+                short y = player[index].piecesStdIndexes[x];
+                if(player[index].pieces[y].position > 100)
+                {
+                    if((player[index].pieces[y].position + player[index].diceVal) <= 106)
+                    {
+                        ID = y;
+                        break;
+                    }
+                    else
+                    {
+                        return ID;
+                        //break;
+                    }
+                }
+                else
+                {
+                    ID = y;
+                    break;
+                }
+            }
+            else
+            {
+                return ID;
+            }
+        }
+    }
+
+    return ID;
+}
+
+short redBehaviour(short index, struct players *player)
+{
+    short ID = -1; //changed
+
+    if(player[index].piecesBase > 0 && player[index].diceVal == 6)
+    {
+        setCellX(index, player);
+        printCellX(index, player);
+    }
+    else if(player[index].piecesHome != 4)
+    {
+        while(1)
+        {
+            short x = rand() % 4;
+            if(player[index].piecesStdIndexes[x] != -1 && (player[index].pieces[player[index].piecesStdIndexes[x]].position != 106 || ((player[index].pieces[x].position + player[index].diceVal) <= 106)))
+            {
+                short y = player[index].piecesStdIndexes[x];
+                if(player[index].pieces[y].position > 100)
+                {
+                    if((player[index].pieces[y].position + player[index].diceVal) <= 106)
+                    {
+                        ID = y;
+                        break;
+                    }
+                    else
+                    {
+                        return ID;
+                        //break;
+                    }
+                }
+                else
+                {
+                    ID = y;
+                    break;
+                }
+            }
+            else
+            {
+                return ID;
+            }
+        }
+    }
+
+    return ID;
+}
+
+short greenBehaviour(short index, struct players *player)
 {
     short ID = -1;
 
@@ -315,6 +484,7 @@ short yellowBehaviour(short index, struct players *player)
                     else
                     {
                         return ID;
+                        //break;
                     }
                 }
                 else
@@ -323,49 +493,10 @@ short yellowBehaviour(short index, struct players *player)
                     break;
                 }
             }
-        }
-    }
-
-    return ID;
-}
-
-short blueBehaviour(short index, struct players *player)
-{
-    short ID = -1;
-
-    if(player[index].piecesBase > 0 && player[index].diceVal == 6 && coinToss == 0)
-    {
-        setCellX(index, player);
-        printCellX(index, player);
-    }
-    else if(player[index].piecesHome != 4)
-    {
-        while(1)
-        {
-            short x = player[index].prevPieceID % 4;
-            if(player[index].piecesStdIndexes[x] != -1 && (player[index].pieces[player[index].piecesStdIndexes[x]].position != 106 || ((player[index].pieces[x].position + player[index].diceVal) <= 106)))
+            else
             {
-                short y = player[index].piecesStdIndexes[x];
-                if(player[index].pieces[y].position > 100)
-                {
-                    if((player[index].pieces[y].position + player[index].diceVal) <= 106)
-                    {
-                        ID = y;
-                        break;
-                    }
-                    else
-                    {
-                        return ID;
-                    }
-                }
-                else
-                {
-                    ID = y;
-                    break;
-                }
+                return ID;
             }
-
-            player[index].prevPieceID++;
         }
     }
 
@@ -387,12 +518,10 @@ void pieceMove(short index, struct players *player)
                 pieceID = yellowBehaviour(index, player);
             }
 
-            player[index].pieces[pieceID].preValue = player[index].pieces[pieceID].position;
-
-            printf("\nYellow Piece ID : %d\n", pieceID); //Remove this after debugging
-
             if(pieceID >= 0 && pieceID <= 3)
             {
+                player[index].pieces[pieceID].preValue = player[index].pieces[pieceID].position;
+
                 if(player[index].pieces[pieceID].preValue >= 0 && player[index].pieces[pieceID].preValue <= 51)
                 {
                     if(player[index].pieces[pieceID].preValue == 0)
@@ -448,12 +577,10 @@ void pieceMove(short index, struct players *player)
                 pieceID = blueBehaviour(index, player);
             }
 
-            player[index].pieces[pieceID].preValue = player[index].pieces[pieceID].position;
-
-            printf("\nBlue Piece ID : %d\n", pieceID); //Remove this after debugging
-
             if(pieceID >= 0 && pieceID <= 3)
             {
+                player[index].pieces[pieceID].preValue = player[index].pieces[pieceID].position;
+
                 if(player[index].pieces[pieceID].preValue >= 0 && player[index].pieces[pieceID].preValue <= 51)
                 {
                     if(player[index].pieces[pieceID].preValue == 13)
@@ -463,7 +590,7 @@ void pieceMove(short index, struct players *player)
                         {
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
-                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
                             player[index].colour,
                             player[index].letter,
                             pieceID + 1);
@@ -501,91 +628,119 @@ void pieceMove(short index, struct players *player)
                 break;
             }
 
-        /*case 2:
-            if(previous >= 0 && previous <= 51)
+        case 2:
+            if(player[index].piecesBase != 4 || player[index].diceVal == 6)
             {
-                if(previous == 26)
+                pieceID = redBehaviour(index, player);
+            }
+
+            if(pieceID >= 0 && pieceID <= 3)
+            {
+                player[index].pieces[pieceID].preValue = player[index].pieces[pieceID].position;
+
+                if(player[index].pieces[pieceID].preValue >= 0 && player[index].pieces[pieceID].preValue <= 51)
                 {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                    if(player[index].pieces[pieceID].preValue == 26)
+                    {
+                        player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                        if(player[index].pieces[pieceID].position == 106)
+                        {
+                            player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                            player[index].piecesHome++;
+                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            player[index].colour,
+                            player[index].letter,
+                            pieceID + 1);
+                        }
+                    }
+                    else if(player[index].pieces[pieceID].preValue < 26 && ((player[index].pieces[pieceID].preValue + player[index].diceVal) > 26))
+                    {
+                        player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (26 - player[index].pieces[pieceID].preValue));
+                    }
+                    else
+                    {
+                        player[index].pieces[pieceID].position = (player[index].pieces[pieceID].preValue + player[index].diceVal) % 52;
+                    }
+                }
+                else
+                {
+                    player[index].pieces[pieceID].position += player[index].diceVal;
                     if(player[index].pieces[pieceID].position == 106)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
-                        printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                        printf("\n" RED "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
                         pieceID + 1);
                     }
                 }
-                else if(previous < 26 && ((previous + player[index].diceVal) > 26))
-                {
-                    player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (26 - previous));
-                }
-                else
-                {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
-                }
+
+                printPieceMove(index, pieceID, player[index].pieces[pieceID].preValue, player);
+
+                break;
             }
             else
             {
-                player[index].pieces[pieceID].position += player[index].diceVal;
-                if(player[index].pieces[pieceID].position == 106)
-                {
-                    player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
-                    player[index].piecesHome++;
-                    printf("\n" RED "%s piece %c%d entered home." RESET "\n",
-                    player[index].colour,
-                    player[index].letter,
-                    pieceID + 1);
-                }
+                break;
             }
-
-            printPieceMove(index, pieceID, previous, player);
-
-            break;
 
         case 3:
-            if(previous >= 0 && previous <= 51)
+            if(player[index].piecesBase != 4 || player[index].diceVal == 6)
             {
-                if(previous == 39)
+                pieceID = greenBehaviour(index, player);
+            }
+
+            if(pieceID >= 0 && pieceID <= 3)
+            {
+                player[index].pieces[pieceID].preValue = player[index].pieces[pieceID].position;
+
+                if(player[index].pieces[pieceID].preValue >= 0 && player[index].pieces[pieceID].preValue <= 51)
                 {
-                    player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                    if(player[index].pieces[pieceID].preValue == 39)
+                    {
+                        player[index].pieces[pieceID].position = 100 + player[index].diceVal;
+                        if(player[index].pieces[pieceID].position == 106)
+                        {
+                            player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
+                            player[index].piecesHome++;
+                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                            player[index].colour,
+                            player[index].letter,
+                            pieceID + 1);
+                        }
+                    }
+                    else if(player[index].pieces[pieceID].preValue < 39 && ((player[index].pieces[pieceID].preValue + player[index].diceVal) > 39))
+                    {
+                        player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (39 - player[index].pieces[pieceID].preValue));
+                    }
+                    else
+                    {
+                        player[index].pieces[pieceID].position = (player[index].pieces[pieceID].preValue + player[index].diceVal) % 52;
+                    }
+                }
+                else
+                {
+                    player[index].pieces[pieceID].position += player[index].diceVal;
                     if(player[index].pieces[pieceID].position == 106)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
-                        printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
+                        printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
                         player[index].colour,
                         player[index].letter,
                         pieceID + 1);
                     }
                 }
-                else if(previous < 39 && ((previous + player[index].diceVal) > 39))
-                {
-                    player[index].pieces[pieceID].position = 100 + (player[index].diceVal - (39 - previous));
-                }
-                else
-                {
-                    player[index].pieces[pieceID].position = (previous + player[index].diceVal) % 52;
-                }
+
+                printPieceMove(index, pieceID, player[index].pieces[pieceID].preValue, player);
+
+                break;
             }
             else
             {
-                player[index].pieces[pieceID].position += player[index].diceVal;
-                if(player[index].pieces[pieceID].position == 106)
-                {
-                    player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
-                    player[index].piecesHome++;
-                    printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
-                    player[index].colour,
-                    player[index].letter,
-                    pieceID + 1);
-                }
+                break;
             }
-
-            printPieceMove(index, pieceID, previous, player);
-
-            break;*/
     }
 }
 

@@ -28,7 +28,6 @@ struct players
     short piecesHome;
     short piecesStdIndexes[4];
     short piecesHomeIndexes[4];
-    short prevPieceID;
 };
 
 void gameLoop();
@@ -47,7 +46,17 @@ void printCellX(short index, struct players *player);
 
 void printStatus(struct players *player);
 
+void printPieceMove(short index, short pieceID, short previous, struct players *player);
+
+short winCheck(struct players *player);
+
 short yellowBehaviour(short index, struct players *player);
+
+short blueBehaviour(short index, struct players *player);
+
+short redBehaviour(short index, struct players *player);
+
+short greenBehaviour(short index, struct players *player);
 
 void pieceMove(short index, struct players *player);
 
