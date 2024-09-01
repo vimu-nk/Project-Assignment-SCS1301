@@ -121,7 +121,7 @@ void gameLoop()
 
         if(winner != -1)
         {
-            printf("\n%s player win the game!\n", player[winner].colour);
+            printf("\n%s player wins!!!\n", player[winner].colour);
             break;
         }
 
@@ -282,14 +282,37 @@ void printStatus(struct players *player)
 
 void printPieceMove(short index, short pieceID, short previous, struct players *player)
 {
-    printf("%s moves %c%d from location L%d to L%d by %d units in %s.\n",
+    printf("%s moves %c%d ",
     player[index].colour,
     player[index].letter,
-    pieceID + 1,
-    previous,
-    player[index].pieces[pieceID].position,
-    player[index].diceVal,
-    player[index].pieces[pieceID].pieceDir == 0 ? "clockwise" : "counter-clockwise");
+    pieceID + 1);
+
+    if(previous >= 0 && previous <= 51 && player[index].pieces[pieceID].position >= 101 && player[index].pieces[pieceID].position <= 105)
+    {
+        printf("from location L%d to Home Straight Cell %d by %d units.\n",
+        previous,
+        player[index].pieces[pieceID].position - 100,
+        player[index].diceVal);
+    }
+    else if(previous >= 101 && previous <= 105 && player[index].pieces[pieceID].position >= 101 && player[index].pieces[pieceID].position <= 105)
+    {
+        printf("from location Home Straight Cell %d to Home Straight Cell %d by %d units.\n",
+        previous - 100,
+        player[index].pieces[pieceID].position - 100,
+        player[index].diceVal);
+    }
+    else if(previous < 106 && player[index].pieces[pieceID].position == 106)
+    {
+        printf("to Home\n");
+    }
+    else
+    {
+        printf("from location L%d to L%d by %d units in %s\n",
+        previous,
+        player[index].pieces[pieceID].position,
+        player[index].diceVal,
+        player[index].pieces[pieceID].pieceDir == 0 ? "clockwise" : "counter-clockwise");
+    }
 }
 
 short winCheck(struct players *player)
@@ -528,10 +551,6 @@ void pieceMove(short index, struct players *player)
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
                             player[index].piecesStdIndexes[pieceID] = -2;
-                            printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
-                            player[index].colour,
-                            player[index].letter,
-                            pieceID + 1);
                         }
                     }
                     else if(player[index].pieces[pieceID].preValue < 52 && ((player[index].pieces[pieceID].preValue + player[index].diceVal) > 52))
@@ -551,10 +570,6 @@ void pieceMove(short index, struct players *player)
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
                         player[index].piecesStdIndexes[pieceID] = -2;
-                        printf("\n" YELLOW "%s piece %c%d entered home." RESET "\n",
-                        player[index].colour,
-                        player[index].letter,
-                        pieceID + 1);
                     }
                 }
 
@@ -586,10 +601,6 @@ void pieceMove(short index, struct players *player)
                         {
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
-                            printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
-                            player[index].colour,
-                            player[index].letter,
-                            pieceID + 1);
                         }
                     }
                     else if(player[index].pieces[pieceID].preValue < 13 && ((player[index].pieces[pieceID].preValue + player[index].diceVal) > 13))
@@ -608,10 +619,6 @@ void pieceMove(short index, struct players *player)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
-                        printf("\n" BLUE "%s piece %c%d entered home." RESET "\n",
-                        player[index].colour,
-                        player[index].letter,
-                        pieceID + 1);
                     }
                 }
 
@@ -643,10 +650,6 @@ void pieceMove(short index, struct players *player)
                         {
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
-                            printf("\n" RED "%s piece %c%d entered home." RESET "\n",
-                            player[index].colour,
-                            player[index].letter,
-                            pieceID + 1);
                         }
                     }
                     else if(player[index].pieces[pieceID].preValue < 26 && ((player[index].pieces[pieceID].preValue + player[index].diceVal) > 26))
@@ -665,10 +668,6 @@ void pieceMove(short index, struct players *player)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
-                        printf("\n" RED "%s piece %c%d entered home." RESET "\n",
-                        player[index].colour,
-                        player[index].letter,
-                        pieceID + 1);
                     }
                 }
 
@@ -700,10 +699,6 @@ void pieceMove(short index, struct players *player)
                         {
                             player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                             player[index].piecesHome++;
-                            printf("\n" GREEN "%s piece %c%d entered home." RESET "\n",
-                            player[index].colour,
-                            player[index].letter,
-                            pieceID + 1);
                         }
                     }
                     else if(player[index].pieces[pieceID].preValue < 39 && ((player[index].pieces[pieceID].preValue + player[index].diceVal) > 39))
@@ -722,10 +717,6 @@ void pieceMove(short index, struct players *player)
                     {
                         player[index].piecesHomeIndexes[player[index].piecesHome] = pieceID;
                         player[index].piecesHome++;
-                        printf("\n" GREEN "%s piece %c%d entered home." RESET "\n",
-                        player[index].colour,
-                        player[index].letter,
-                        pieceID + 1);
                     }
                 }
 
